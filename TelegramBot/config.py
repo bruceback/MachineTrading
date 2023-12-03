@@ -1,5 +1,5 @@
 BOT_TOKEN = '6663369342:AAFF-GEc_IijchAV-oDqwIAUlACoH70Wr90'
-ADMINS_ID = [757722726] #айди админов
+ADMINS_ID = [757722726]  # айди админов
 
 GREETINGS = '''
 Hi! I am MachineTrading Bot and I\'ll help you to manage your stocks!
@@ -12,25 +12,13 @@ Here's what I can do:
 Tap on one of the commands to start!
 '''
 
-STOCK_INFO = '''
-Quantity: 35\n
-Price dinamycs:\n
-2021-04-19  127.319994
-2021-04-20  127.573533
-2021-04-21  125.947243
-2021-04-22  128.191742
-2021-04-23  125.964680
-'''
+POLICY_AGREEMENT = 'We can predict stocks\n(we do not promise anything)'
+POLICY_AGREEMENT_BTN = ['I accept the policy, continue']
 
-PREDICTION = '''
-Price prediction:\n
-2021-04-26  128.072855
-2021-04-27  128.982140
-2021-04-28  128.472149
-2021-04-29  128.623482
-2021-04-30  128.671982
-'''
+SEARCH_ERROR = 'Sorry! Haven\'t found anything( \nCheck your input maybe and push /prediction to try again'
+SEARCH_RESULT = 'According to your request the following stocks were found. Choose the one\nIf there\'s no relevant ' \
+                'stock check your input maybe and push /prediction to try again '
 
-POSITIVE_ADVICE = 'We suggest you to sell this stock!'
+HISTORY_ERROR = 'The history of a stock is not found\nCheck your input maybe and push /prediction to try again'
 
-NEGATIVE_ADVICE = 'We suggest you to buy this stock!'
+DATA_ERROR = 'Something happened during prediction\n Please, push /prediction to try again'

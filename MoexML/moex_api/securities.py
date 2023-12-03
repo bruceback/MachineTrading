@@ -21,6 +21,8 @@ def find_on_moex(query: str, page: int = 1) -> tp.Optional[pd.DataFrame]:
         res_df.drop(columns="group")
     except KeyError:
         return
+    except AttributeError:
+        return
 
     return res_df
 
@@ -77,3 +79,4 @@ def get_history(security_id: str, engine: str, market: str,
         all_history = pd.concat([all_history, history_on_page])
         page += 1
     return all_history
+    # [["BOARDID", "TRADEDATE", "WAPRICE"]]
