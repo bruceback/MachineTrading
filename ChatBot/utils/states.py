@@ -1,4 +1,4 @@
-from aiogram.dispatcher.fsm.state import State, StatesGroup
+from aiogram.fsm.state import StatesGroup, State
 
 
 class UserMain(StatesGroup):

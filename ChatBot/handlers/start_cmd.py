@@ -1,15 +1,15 @@
 from aiogram import Router, types, F
-from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.dispatcher.filters import Command
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from MoexML.moex_api.securities import find_on_moex, get_history
 from MoexML.ml_models.auto_ts import get_prediction
 from MoexML.preprocessing.stock_history import prepare_history
-import TelegramBot.config as config
-from TelegramBot.loader import log
+import ChatBot.config as config
+from loguru import logger as log
 
-from TelegramBot.utils.states import UserMain
+from ChatBot.utils.states import UserMain
 
 dp = Router()
 
@@ -31,18 +31,17 @@ async def initialize_vars(user_id):
     variables[user_id] = {"stocks": []}
 
 
-@dp.message(Command(commands='start'), state='*')
-async def start_cmd(message: types.Message):
+@dp.message(Command(commands=["start"]))
+async def cmd_start(message: types.Message, state: FSMContext):
+    await state.clear()
     global variables
 
     user_id = message.from_user.id
     await initialize_vars(user_id)
-    log.info(user_id)
-    log.info(variables)
     await message.answer(config.GREETINGS)
 
 
-@dp.message(commands='prediction', state='*')
+@dp.message(Command(commands=['prediction']))
 async def view_portfolio(message: types.Message, state: FSMContext):
     global variables
 
@@ -93,6 +92,8 @@ async def stock_prediction(call: types.CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
 
     text = 'Retrieving the history of stock...'
+    await call.message.answer(text)
+    text = 'It can take some time. We kindly ask you to wait a few minutes)'
     await call.message.answer(text)
     stock_history = get_history(variables[user_id]["stocks"][int(call.data)], "stock", "shares")
     try:
