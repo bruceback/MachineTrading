@@ -8,4 +8,5 @@
     
 Запуск:
 
+    pip install -r requirements.txt
     python -m ChatBot.app
