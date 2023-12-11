@@ -22,3 +22,6 @@ SEARCH_RESULT = 'According to your request the following stocks were found. Choo
 HISTORY_ERROR = 'The history of a stock is not found\nCheck your input maybe and push /prediction to try again'
 
 DATA_ERROR = 'Something happened during prediction\n Please, push /prediction to try again'
+
+INPROGRESS_MES = 'The feature is planned for the following releases. Stay tuned for the updates!'
+

@@ -41,6 +41,22 @@ async def cmd_start(message: types.Message, state: FSMContext):
     await message.answer(config.GREETINGS)
 
 
+@dp.message(Command(commands=['trading']))
+async def view_portfolio(message: types.Message, state: FSMContext):
+
+    text = config.INPROGRESS_MES
+    await message.answer(text)
+    await state.clear()
+
+
+@dp.message(Command(commands=['portfolio']))
+async def view_portfolio(message: types.Message, state: FSMContext):
+
+    text = config.INPROGRESS_MES
+    await message.answer(text)
+    await state.clear()
+
+
 @dp.message(Command(commands=['prediction']))
 async def view_portfolio(message: types.Message, state: FSMContext):
     global variables
