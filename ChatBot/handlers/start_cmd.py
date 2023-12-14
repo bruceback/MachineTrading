@@ -60,7 +60,7 @@ async def view_portfolio(message: types.Message, state: FSMContext):
         portfolio_yield = round((user.balance + get_portfolio_price(portfolio) - user.all_deposits) / user.all_deposits, 2)*100
 
     if not portfolio:
-        text += config.EMPTY_PORTFOLIO  # portfolio is empty
+        text += config.EMPTY_PORTFOLIO + '\n'  # portfolio is empty
     else:
         for key, value in portfolio.items():
             text += str(key) + ' : ' + str(value) + '\n'
@@ -90,7 +90,7 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
         await message.answer(text)
         await state.clear()
     except ValueError:
-        text = 'please, input a number:'
+        text = 'Please, input a number:'
         await message.answer(text)
         await state.set_state(UserMain.stock_buy)
         return
@@ -98,7 +98,7 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
 
 @dp.message(Command(commands=['trading']))
 async def trade(message: types.Message, state: FSMContext):
-    text = 'input a name of a company or a stock:'
+    text = 'Input a name of a company or a stock:'
     await message.answer(text)
     await state.set_state(UserMain.stock_search_trading)
 
@@ -144,7 +144,7 @@ async def view_portfolio(message: types.Message, state: FSMContext):
 
 @dp.callback_query(F.data, UserMain.start_prediction)
 async def stock_input(call: types.CallbackQuery, state: FSMContext):
-    text = 'input a name of a company or a stock:'
+    text = 'Input a name of a company or a stock:'
     await call.message.answer(text)
     await state.set_state(UserMain.stock_search_prediction)
 
@@ -241,7 +241,6 @@ async def buy_sell_stock(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query(F.data == '0', UserMain.stock_actions)
 async def buy_sell_stock(call: types.CallbackQuery, state: FSMContext):
     global variables
-    user_id = call.from_user.id
 
     text = 'Input the number of shares to buy:'
     await call.message.answer(text)
@@ -251,7 +250,6 @@ async def buy_sell_stock(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query(F.data == '1', UserMain.stock_actions)
 async def buy_sell_stock(call: types.CallbackQuery, state: FSMContext):
     global variables
-    user_id = call.from_user.id
 
     text = 'Input the number of shares to sell:'
     await call.message.answer(text)
@@ -278,7 +276,7 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
             await state.clear()
 
     except ValueError:
-        text = 'please, input a number:'
+        text = 'Please, input a number:'
         await message.answer(text)
         await state.set_state(UserMain.stock_buy)
         return
@@ -304,7 +302,7 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
             await state.clear()
 
     except ValueError:
-        text = 'please, input a number:'
+        text = 'Please, input a number:'
         await message.answer(text)
         await state.set_state(UserMain.stock_buy)
         return
