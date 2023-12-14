@@ -25,7 +25,6 @@ def add_user(tg: str, connection: sqlite3.Connection):
     return user
 
 
-
 def deposit(tg: str, money: float, connection: sqlite3.Connection):
     cursor = connection.cursor()
     query = 'UPDATE Users SET balance = balance + ?, all_deposits = all_deposits + ? WHERE tg = ?'

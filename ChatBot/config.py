@@ -5,11 +5,10 @@ GREETINGS = '''
 Hi! I am MachineTrading Bot and I\'ll help you to manage your stocks!
 
 Here's what I can do:
-start - start the conversation
-deposit - replenish the balance
-portfolio - view the portfolio
-prediction - predict the price of stock
-trading - buy/sell a stock
+/deposit - replenish the balance
+/portfolio - view the portfolio
+/prediction - predict the price of stock
+/trading - buy/sell a stock
 
 Tap on one of the commands to start!
 '''
@@ -17,7 +16,7 @@ Tap on one of the commands to start!
 POLICY_AGREEMENT = 'We can predict stocks\n(we do not promise anything)'
 POLICY_AGREEMENT_BTN = ['I accept the policy, continue']
 
-SEARCH_ERROR = 'Sorry! Haven\'t found anything( \nCheck your input maybe and push /prediction to try again'
+SEARCH_ERROR = 'Sorry! Haven\'t found anything( \nCheck your input maybe and push the previous command to try again'
 SEARCH_RESULT = 'According to your request the following stocks were found. Choose the one\nIf there\'s no relevant ' \
                 'stock check your input maybe and push /prediction to try again '
 

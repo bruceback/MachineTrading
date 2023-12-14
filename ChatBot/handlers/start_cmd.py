@@ -3,10 +3,10 @@ from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from MoexML.moex_api.securities import find_on_moex, get_history
+from MoexML.moex_api.securities import find_on_moex, get_history, get_current_price, get_portfolio_price
 from MoexML.ml_models.auto_ts import get_prediction
 from MoexML.preprocessing.stock_history import prepare_history
-from DataBase.controllers import add_user, get_portfolio, add_trading_record, deposit
+from DataBase.controllers import add_user, get_portfolio, add_trading_record, deposit, get_user
 from DataBase import get_connection
 
 import ChatBot.config as config
@@ -51,12 +51,19 @@ async def cmd_start(message: types.Message, state: FSMContext):
 async def view_portfolio(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     text = ''
+    user = get_user(str(user_id), connection)
+    text += 'Balance: ' + str(user.balance) + '\n\n'
     portfolio = get_portfolio(str(user_id), connection)
+
+    portfolio_yield = round((user.balance + get_portfolio_price(portfolio) - user.all_deposits) / user.all_deposits, 2)*100
+
     if not portfolio:
-        text = config.EMPTY_PORTFOLIO  # portfolio is empty
+        text += config.EMPTY_PORTFOLIO  # portfolio is empty
     else:
         for key, value in portfolio.items():
             text += str(key) + ' : ' + str(value) + '\n'
+
+    text += '\nYield: ' + str(portfolio_yield) + '%'
     await message.answer(text)
     await state.clear()
 
@@ -87,12 +94,6 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
         return
 
 
-# balance: how much, output balance
-
-# func deposit()
-# output balance
-
-
 @dp.message(Command(commands=['trading']))
 async def trade(message: types.Message, state: FSMContext):
     text = 'input a name of a company or a stock:'
@@ -111,6 +112,7 @@ async def stock_research(message: types.Message, state: FSMContext):
 
     log.info(stock)
     result = find_on_moex(stock)
+    result = result[(result['engine'] == 'stock') & (result['market'] == 'shares')]
     log.info(result)
     if result is None:
         text = config.SEARCH_ERROR
@@ -156,6 +158,8 @@ async def stock_research(message: types.Message, state: FSMContext):
 
     log.info(stock)
     result = find_on_moex(stock)
+    result = result[(result['engine'] == 'stock') & (result['market'] == 'shares')]
+
     log.info(result)
     if result is None:
         text = config.SEARCH_ERROR
@@ -214,7 +218,7 @@ async def stock_info_output(call: types.CallbackQuery, state: FSMContext):
     stock_name = variables[user_id]['primary_boardid']
 
     # get price of stock function
-    stock_price = 0
+    stock_price = get_current_price(stock_name, 'stock', 'shares')
 
     text = f'The prise of {stock_name} is {stock_price}\n\nWhat to do next:'
     key = generate_markup(['buy', 'sell', 'pass'])
@@ -257,7 +261,8 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
     global variables
     user_id = message.from_user.id
     shares_number = message.text
-    stock_price = 0
+    stock_name = variables[user_id]['primary_boardid']
+    stock_price = get_current_price(stock_name, 'stock', 'shares')
 
     try:
         num = int(shares_number)
@@ -282,7 +287,8 @@ async def buy_sell_stock(message: types.Message, state: FSMContext):
     global variables
     user_id = message.from_user.id
     shares_number = message.text
-    stock_price = 0
+    stock_name = variables[user_id]['primary_boardid']
+    stock_price = get_current_price(stock_name, 'stock', 'shares')
 
     try:
         num = int(shares_number)
