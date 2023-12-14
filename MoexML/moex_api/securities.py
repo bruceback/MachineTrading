@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 import pandas as pd
 import typing as tp
 
@@ -80,3 +81,48 @@ def get_history(security_id: str, engine: str, market: str,
         page += 1
     return all_history
     # [["BOARDID", "TRADEDATE", "WAPRICE"]]
+
+
+def get_current_candles(security_id: str, engine: str, market: str,) -> tp.Optional[pd.DataFrame]:
+    """
+    Запрашивает свечи финансового инструмента на текущий день
+    :param security_id: Идентификатор финансового инструмента
+    :param engine: Наименование торговой системы, например, stock (Фондовый рынок и рынок депозитов)
+    :param market: Наименование рынка торговой системы, например, shares (Рынок акций в stock)
+    :return: Таблица со свечами
+    """
+
+    res_json = requests.get(
+        f"http://iss.moex.com/iss/engines/{engine}/markets/{market}/securities/{security_id}/candles.json?"
+        f"&from={datetime.now().strftime('%Y-%m-%d')}").json()
+    try:
+        data = [{k: r[i] for i, k in enumerate(res_json['candles']['columns'])} for r in
+                res_json['candles']['data']]
+        if not data:
+            return None
+    except KeyError:
+        return
+
+    res_df = pd.DataFrame(data)
+    return res_df
+
+
+def get_current_price(security_id: str, engine: str, market: str,) -> float:
+    """
+    Выводит «цену» инструмента, рассчитанную как (low + high) / 2 предыдущей свечи # доступ к стакану платный :(
+    :param security_id: Идентификатор финансового инструмента
+    :param engine: Наименование торговой системы, например, stock (Фондовый рынок и рынок депозитов)
+    :param market: Наименование рынка торговой системы, например, shares (Рынок акций в stock)
+    :return: текущая цена
+    """
+    candles = get_current_candles(security_id, engine, market)
+    last_candle = candles.iloc[-1]
+    price = (last_candle["low"] + last_candle["high"]) / 2
+    return price
+
+
+def get_portfolio_price(portfolio: dict):
+    price = 0
+    for security_id, amount in portfolio.items():
+        price += get_current_price(security_id, "stock", "shares") * amount
+    return price
