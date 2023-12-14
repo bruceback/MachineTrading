@@ -52,10 +52,12 @@ async def view_portfolio(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     text = ''
     user = get_user(str(user_id), connection)
-    text += 'Balance: ' + str(user.balance) + '\n\n'
+    text += 'Balance: ' + str(round(user.balance, 2)) + '\n\n'
     portfolio = get_portfolio(str(user_id), connection)
 
-    portfolio_yield = round((user.balance + get_portfolio_price(portfolio) - user.all_deposits) / user.all_deposits, 2)*100
+    portfolio_yield = 0
+    if user.all_deposits != 0:
+        portfolio_yield = round((user.balance + get_portfolio_price(portfolio) - user.all_deposits) / user.all_deposits, 2)*100
 
     if not portfolio:
         text += config.EMPTY_PORTFOLIO  # portfolio is empty
