@@ -1,7 +1,7 @@
 from datetime import datetime
 import sqlite3
-from models import User
-from exceptions import TradingError
+from DataBase.models import User
+from DataBase.exceptions import TradingError
 
 
 def get_user(tg: str, connection: sqlite3.Connection):
@@ -23,6 +23,7 @@ def add_user(tg: str, connection: sqlite3.Connection):
     user = User(tg=tg, balance=0, all_deposits=0)
     connection.commit()
     return user
+
 
 
 def deposit(tg: str, money: float, connection: sqlite3.Connection):

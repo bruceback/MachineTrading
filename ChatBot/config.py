@@ -5,9 +5,11 @@ GREETINGS = '''
 Hi! I am MachineTrading Bot and I\'ll help you to manage your stocks!
 
 Here's what I can do:
-/portfolio - view the portfolio
-/prediction - predict the price of stock
-/trading - buy/sell a stock
+start - start the conversation
+deposit - replenish the balance
+portfolio - view the portfolio
+prediction - predict the price of stock
+trading - buy/sell a stock
 
 Tap on one of the commands to start!
 '''
@@ -24,4 +26,9 @@ HISTORY_ERROR = 'The history of a stock is not found\nCheck your input maybe and
 DATA_ERROR = 'Something happened during prediction\n Please, push /prediction to try again'
 
 INPROGRESS_MES = 'The feature is planned for the following releases. Stay tuned for the updates!'
+
+SUCCESS_MESSAGE = 'The operation was successful!\n Push /portfolio to check your actual portfolio'
+
+EMPTY_PORTFOLIO = 'Your portfolio is empty, push /deposit to replenish the balance or /trading to buy/sell stocks'
+
 
