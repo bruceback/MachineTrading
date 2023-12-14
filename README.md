@@ -29,6 +29,7 @@
 ## Запуск
 
     pip install -r requirements.txt
+    python -m DataBase.create_db
     python -m ChatBot.app
 
 Бот доступен по ссылке: https://t.me/MachineTraidingBot
