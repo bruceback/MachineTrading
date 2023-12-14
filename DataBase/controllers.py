@@ -15,7 +15,11 @@ def get_user(tg: str, connection: sqlite3.Connection):
 def add_user(tg: str, connection: sqlite3.Connection):
     cursor = connection.cursor()
     query = 'INSERT INTO Users (tg) VALUES (?)'
-    cursor.execute(query, (tg,))
+    try:
+        cursor.execute(query, (tg,))
+    except sqlite3.IntegrityError:
+        return get_user(tg, connection)
+
     user = User(tg=tg, balance=0, all_deposits=0)
     connection.commit()
     return user
@@ -69,4 +73,3 @@ def add_trading_record(tg: str, primary_boardid: str, amount: int, price: float,
     user = update_balance(tg, -amount * price, connection)
     connection.commit()
     return user
-
