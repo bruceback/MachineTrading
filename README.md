@@ -35,4 +35,4 @@
     python -m DataBase.create_db
     python -m ChatBot.app
 
-Бот доступен по ссылке: https://t.me/MachineTraidingBot
+Бот доступен по ссылке: https://t.me/MachineTraidingBot.
